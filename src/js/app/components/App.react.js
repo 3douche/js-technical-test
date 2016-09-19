@@ -8,38 +8,49 @@ var IssueActions = require('../../issue/actions/IssueActions');
 // Stores
 var IssueStore = require('../../issue/store/IssueStore');
 
-function _getStateFromStores(){
-    return{
+// Components
+var LeftPanel = require('../../leftPanel/components/LeftPanel.react');
+var RightPanel = require('../../rightPanel/components/RightPanel.react');
+
+function _getStateFromStores() {
+    return {
+        title: IssueStore.getTitle(),
         comments: IssueStore.getComments()
     }
 }
 
 var App = React.createClass({
 
-    getInitialState: function(){
+    getInitialState: function () {
         return _getStateFromStores();
     },
 
-    componentWillMount: function(){
+    componentWillMount: function () {
         IssueActions.getComments();
     },
 
-    componentDidMount: function(){
+    componentDidMount: function () {
         IssueStore.addChangeListener(this.onChange);
     },
 
-    componentWillUnmount: function(){
+    componentWillUnmount: function () {
         IssueStore.removeChangeListener(this.onChange);
     },
 
-    onChange: function(){
+    onChange: function () {
         this.setState(_getStateFromStores);
     },
 
     render: function () {
 
         return (
-            <div>{this.state.comments}</div>
+            <div className="app-wrapper">
+                <div className="issue-title">{this.state.title}</div>
+                <div className="panel-wrapper">
+                    <LeftPanel/>
+                    <RightPanel comments={this.state.comments}/>
+                </div>
+            </div>
         );
     }
 

@@ -1,0 +1,18 @@
+.app-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.issue-title {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    background-color: #313b44;
+    color: #d6e0e9;
+    font-size: 24px;
+    padding-left: 30px;
+}
+
+.panel-wrapper {
+    display: flex;
+}

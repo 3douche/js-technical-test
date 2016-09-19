@@ -13,6 +13,7 @@ var IssueConst = require('../actions/IssueConst');
 // Webservice
 var IssueWebservice = require('../webservice/IssueWebservice');
 
+var title = "";
 var comments = [];
 
 var IssueStore = assign({}, EventEmitter.prototype, {
@@ -29,15 +30,28 @@ var IssueStore = assign({}, EventEmitter.prototype, {
         this.emit(IssueConst.CHANGE_CONTENT);
     },
 
+    getTitle: function(){
+        return title;
+    },
+
     getComments: function(){
         return comments;
     }
 
 });
 
-function _wsGetComments(){
-    IssueWebservice.getIssueDetails().then(function(data){
-        comments = data;
+function _wsGetIssueTitle(){
+    IssueWebservice.getIssueTitle().then(function(data){
+        var jsonData = JSON.parse(data);
+        title = jsonData.title;
+        IssueStore.emitChange();
+    })
+}
+
+function _wsGetIssueComments(){
+    IssueWebservice.getIssueComments().then(function(data){
+        var jsonData = JSON.parse(data);
+        comments = jsonData;
         IssueStore.emitChange();
     })
 }
@@ -46,7 +60,8 @@ IssueStore.dispatchToken = AppDispatcher.register(function(action){
 
     switch (action.actionType){
         case IssueConst.GET_COMMENTS:
-            _wsGetComments();
+            _wsGetIssueTitle();
+            _wsGetIssueComments();
             break;
     }
 
