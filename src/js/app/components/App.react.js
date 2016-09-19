@@ -15,6 +15,7 @@ var RightPanel = require('../../rightPanel/components/RightPanel.react');
 function _getStateFromStores() {
     return {
         title: IssueStore.getTitle(),
+        users: IssueStore.getUsers(),
         comments: IssueStore.getComments()
     }
 }
@@ -47,7 +48,7 @@ var App = React.createClass({
             <div className="app-wrapper">
                 <div className="issue-title">{this.state.title}</div>
                 <div className="panel-wrapper">
-                    <LeftPanel/>
+                    <LeftPanel users={this.state.users}/>
                     <RightPanel comments={this.state.comments}/>
                 </div>
             </div>

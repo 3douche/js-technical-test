@@ -15,6 +15,7 @@ var IssueWebservice = require('../webservice/IssueWebservice');
 
 var title = "";
 var comments = [];
+var users= [];
 
 var IssueStore = assign({}, EventEmitter.prototype, {
 
@@ -36,6 +37,10 @@ var IssueStore = assign({}, EventEmitter.prototype, {
 
     getComments: function(){
         return comments;
+    },
+
+    getUsers: function(){
+        return users;
     }
 
 });
@@ -52,7 +57,25 @@ function _wsGetIssueComments(){
     IssueWebservice.getIssueComments().then(function(data){
         var jsonData = JSON.parse(data);
         comments = jsonData;
+        _initUsers(jsonData);
         IssueStore.emitChange();
+    })
+}
+
+function _initUsers(commentsList){
+    _.each(commentsList, function(comment){
+        var user = _.find(users, function(u){
+            return u.login === comment.user.login;
+        });
+        if(!user){
+            users.push(
+                {
+                    login: comment.user.login,
+                    nbMessage: 1
+                });
+        }else{
+            user.nbMessage++;
+        }
     })
 }
 

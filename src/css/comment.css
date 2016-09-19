@@ -1,5 +1,5 @@
 .comment-wrapper {
-    width: 50%;
+    width: 70%;
     background-color: #eef3f6;
     overflow-y: auto;
 }
@@ -22,7 +22,6 @@
 
 .comment-left-arrow {
     background-color: #f3fdff;
-    border: 1px solid #e1e6e8;
 }
 
 .comment-left-comment {
@@ -32,11 +31,12 @@
     padding: 20px;
     border-radius: 17px;
     font-size: 18px;
+    max-width: 80%;
+    margin-left: 15px;
 }
 
 .comment-right-arrow {
     background-color: white;
-    border: 1px solid #e1e6e8;
 }
 
 .comment-right-comment {
@@ -46,4 +46,6 @@
     padding: 20px;
     border-radius: 17px;
     font-size: 18px;
+    max-width: 80%;
+    margin-right: 15px;
 }

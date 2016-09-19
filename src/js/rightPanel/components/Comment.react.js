@@ -6,7 +6,6 @@ var Comment = React.createClass({
         return (
             <div className="comment-left">
                 <img className="comment-avatar" src={this.props.comment.user.avatar_url} />
-                <span className="comment-left-arrow">◀</span>
                 <div className="comment-left-comment">{this.props.comment.body}</div>
             </div>
         );
@@ -16,7 +15,6 @@ var Comment = React.createClass({
         return (
             <div className="comment-right">
                 <div className="comment-right-comment">{this.props.comment.body}</div>
-                <span className="comment-right-arrow">▶</span>
                 <img className="comment-avatar" src={this.props.comment.user.avatar_url} />
             </div>
         );
