@@ -71,12 +71,23 @@ function _initUsers(commentsList){
             users.push(
                 {
                     login: comment.user.login,
-                    nbMessage: 1
+                    nbMessage: 1,
+					color: _getRandomColor(),
+					avatar: comment.user.avatar_url
                 });
         }else{
             user.nbMessage++;
         }
     })
+}
+
+function _getRandomColor() {
+	var letters = '0123456789ABCDEF';
+	var color = '#';
+	for (var i = 0; i < 6; i++ ) {
+		color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
 }
 
 IssueStore.dispatchToken = AppDispatcher.register(function(action){
