@@ -15,46 +15,46 @@ var IssueWebservice = require('../webservice/IssueWebservice');
 
 var title = "";
 var comments = [];
-var users= [];
+var users = [];
 
 var IssueStore = assign({}, EventEmitter.prototype, {
 
-    addChangeListener: function(callback){
+    addChangeListener: function (callback) {
         this.on(IssueConst.CHANGE_CONTENT, callback);
     },
 
-    removeChangeListener: function(callback){
+    removeChangeListener: function (callback) {
         this.removeListener(IssueConst.CHANGE_CONTENT, callback);
     },
 
-    emitChange: function(){
+    emitChange: function () {
         this.emit(IssueConst.CHANGE_CONTENT);
     },
 
-    getTitle: function(){
+    getTitle: function () {
         return title;
     },
 
-    getComments: function(){
+    getComments: function () {
         return comments;
     },
 
-    getUsers: function(){
+    getUsers: function () {
         return users;
     }
 
 });
 
-function _wsGetIssueTitle(){
-    IssueWebservice.getIssueTitle().then(function(data){
+function _wsGetIssueTitle() {
+    IssueWebservice.getIssueTitle().then(function (data) {
         var jsonData = JSON.parse(data);
         title = jsonData.title;
         IssueStore.emitChange();
     })
 }
 
-function _wsGetIssueComments(){
-    IssueWebservice.getIssueComments().then(function(data){
+function _wsGetIssueComments() {
+    IssueWebservice.getIssueComments().then(function (data) {
         var jsonData = JSON.parse(data);
         comments = jsonData;
         _initUsers(jsonData);
@@ -62,40 +62,53 @@ function _wsGetIssueComments(){
     })
 }
 
-function _initUsers(commentsList){
-    _.each(commentsList, function(comment){
-        var user = _.find(users, function(u){
+function _initUsers(commentsList) {
+    _.each(commentsList, function (comment) {
+        var user = _.find(users, function (u) {
             return u.login === comment.user.login;
         });
-        if(!user){
+        if (!user) {
             users.push(
                 {
                     login: comment.user.login,
                     nbMessage: 1,
-					color: _getRandomColor(),
-					avatar: comment.user.avatar_url
+                    color: _getRandomColor(),
+                    avatar: comment.user.avatar_url,
+                    enable: true
                 });
-        }else{
+        } else {
             user.nbMessage++;
         }
     })
 }
 
 function _getRandomColor() {
-	var letters = '0123456789ABCDEF';
-	var color = '#';
-	for (var i = 0; i < 6; i++ ) {
-		color += letters[Math.floor(Math.random() * 16)];
-	}
-	return color;
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
 
-IssueStore.dispatchToken = AppDispatcher.register(function(action){
+function _filterUser(user) {
+    var userToFilter = _.find(users, {'login': user.login});
+    if (userToFilter) {
+        userToFilter.enable = !userToFilter.enable;
+    }
+}
 
-    switch (action.actionType){
+IssueStore.dispatchToken = AppDispatcher.register(function (action) {
+
+    switch (action.actionType) {
         case IssueConst.GET_COMMENTS:
             _wsGetIssueTitle();
             _wsGetIssueComments();
+            break;
+
+        case IssueConst.FILTER_USER:
+            _filterUser(action.user);
+            IssueStore.emitChange();
             break;
     }
 

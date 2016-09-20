@@ -49,7 +49,7 @@ var App = React.createClass({
                 <div className="issue-title">{this.state.title}</div>
                 <div className="panel-wrapper">
                     <LeftPanel users={this.state.users}/>
-                    <RightPanel comments={this.state.comments}/>
+                    <RightPanel comments={this.state.comments} users={this.state.users}/>
                 </div>
             </div>
         );

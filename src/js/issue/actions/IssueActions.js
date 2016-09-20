@@ -12,6 +12,13 @@ var IssueActions = {
         AppDispatcher.dispatch({
             actionType: IssueConst.GET_COMMENTS
         });
+    },
+
+    filterUser: function(user){
+        AppDispatcher.dispatch({
+            actionType: IssueConst.FILTER_USER,
+            user: user
+        });
     }
 };
 
